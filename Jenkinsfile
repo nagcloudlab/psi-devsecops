@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        JAVA_HOME          = '/usr/lib/jvm/java-21-openjdk-amd64'
         DOCKER_REGISTRY   = 'docker.io'
         IMAGE_TAG          = "${env.BUILD_NUMBER}-${env.GIT_COMMIT?.take(7) ?: 'latest'}"
     }
