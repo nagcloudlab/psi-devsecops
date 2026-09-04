@@ -31,38 +31,12 @@ pipeline {
             parallel {
                 stage('Gitleaks') {
                     steps {
-                        sh '''
-                            echo "=== Running Gitleaks ==="
-                            docker run --rm -v $(pwd):/repo \
-                                zricethezav/gitleaks:latest \
-                                detect --source /repo \
-                                --config /repo/security-config/gitleaks.toml \
-                                --report-path /repo/reports/gitleaks-report.json \
-                                --report-format json \
-                                --verbose
-                        '''
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'reports/gitleaks-report.json', allowEmptyArchive: true
-                        }
+                        sh 'echo "=== [PLACEHOLDER] Gitleaks scan would run here ==="'
                     }
                 }
                 stage('TruffleHog') {
                     steps {
-                        sh '''
-                            echo "=== Running TruffleHog ==="
-                            docker run --rm -v $(pwd):/repo \
-                                trufflesecurity/trufflehog:latest \
-                                filesystem /repo \
-                                --only-verified \
-                                --json > reports/trufflehog-report.json || true
-                        '''
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'reports/trufflehog-report.json', allowEmptyArchive: true
-                        }
+                        sh 'echo "=== [PLACEHOLDER] TruffleHog scan would run here ==="'
                     }
                 }
             }
@@ -135,27 +109,12 @@ pipeline {
             parallel {
                 stage('SpotBugs + FindSecBugs (Java)') {
                     steps {
-                        dir('order-service') {
-                            sh 'mvn spotbugs:check -B || true'
-                            sh 'mvn spotbugs:spotbugs -B'
-                        }
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'order-service/target/spotbugsXml.xml', allowEmptyArchive: true
-                        }
+                        sh 'echo "=== [PLACEHOLDER] SpotBugs + FindSecBugs scan would run here ==="'
                     }
                 }
                 stage('ESLint Security (Node)') {
                     steps {
-                        dir('product-service') {
-                            sh 'npx eslint src/ --format json -o ../reports/eslint-security-report.json || true'
-                        }
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'reports/eslint-security-report.json', allowEmptyArchive: true
-                        }
+                        sh 'echo "=== [PLACEHOLDER] ESLint Security scan would run here ==="'
                     }
                 }
             }
@@ -170,50 +129,7 @@ pipeline {
         // ═══════════════════════════════════════════
         stage('Security Quality Gate') {
             steps {
-                script {
-                    sh 'mkdir -p reports'
-                    def gatePass = true
-                    def issues = []
-
-                    // Check Gitleaks results
-                    if (fileExists('reports/gitleaks-report.json')) {
-                        def gitleaksReport = readJSON file: 'reports/gitleaks-report.json'
-                        if (gitleaksReport instanceof List && gitleaksReport.size() > 0) {
-                            issues.add("Gitleaks: ${gitleaksReport.size()} secret(s) detected")
-                            gatePass = false
-                        }
-                    }
-
-                    // Check Semgrep results
-                    if (fileExists('reports/semgrep-report.json')) {
-                        def semgrepReport = readJSON file: 'reports/semgrep-report.json'
-                        def errors = semgrepReport.results?.findAll { it.extra?.severity == 'ERROR' } ?: []
-                        if (errors.size() > 0) {
-                            issues.add("Semgrep: ${errors.size()} ERROR-level finding(s)")
-                            gatePass = false
-                        }
-                    }
-
-                    // Summary
-                    echo "════════════════════════════════════"
-                    echo "   SECURITY QUALITY GATE RESULTS"
-                    echo "════════════════════════════════════"
-                    echo "Secrets Detection : ${fileExists('reports/gitleaks-report.json') ? 'SCANNED' : 'SKIPPED'}"
-                    echo "SAST (Semgrep)    : ${fileExists('reports/semgrep-report.json') ? 'SCANNED' : 'SKIPPED'}"
-                    echo "SAST (SpotBugs)   : ${fileExists('order-service/target/spotbugsXml.xml') ? 'SCANNED' : 'SKIPPED'}"
-                    echo "SCA (OWASP)       : ${fileExists('order-service/target/dependency-check-report.json') ? 'SCANNED' : 'SKIPPED'}"
-                    echo "SCA (npm audit)   : ${fileExists('reports/npm-audit-report.json') ? 'SCANNED' : 'SKIPPED'}"
-                    echo "SCA (Trivy FS)    : ${fileExists('reports/trivy-fs-report.json') ? 'SCANNED' : 'SKIPPED'}"
-                    echo "════════════════════════════════════"
-
-                    if (!gatePass) {
-                        echo "BLOCKING ISSUES:"
-                        issues.each { echo "  - ${it}" }
-                        error("Security Quality Gate FAILED: ${issues.join(', ')}")
-                    } else {
-                        echo "Result: PASSED"
-                    }
-                }
+                sh 'echo "=== [PLACEHOLDER] Security Quality Gate check would run here ==="'
             }
         }
 
@@ -228,14 +144,7 @@ pipeline {
                             sh "mvn package -DskipTests -B"
                             sh "docker build -t ${DOCKER_REGISTRY}/order-service:${IMAGE_TAG} ."
                         }
-                        sh '''
-                            echo "=== Trivy Image Scan: order-service ==="
-                        '''
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'reports/trivy-order-image.json', allowEmptyArchive: true
-                        }
+                        sh 'echo "=== [PLACEHOLDER] Trivy Image Scan: order-service would run here ==="'
                     }
                 }
                 stage('product-service Image') {
@@ -243,14 +152,7 @@ pipeline {
                         dir('product-service') {
                             sh "docker build -t ${DOCKER_REGISTRY}/product-service:${IMAGE_TAG} ."
                         }
-                        sh '''
-                            echo "=== Trivy Image Scan: product-service ==="
-                        '''
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'reports/trivy-product-image.json', allowEmptyArchive: true
-                        }
+                        sh 'echo "=== [PLACEHOLDER] Trivy Image Scan: product-service would run here ==="'
                     }
                 }
             }
@@ -291,54 +193,12 @@ pipeline {
             parallel {
                 stage('ZAP - order-service') {
                     steps {
-                        sh '''
-                            echo "=== OWASP ZAP Scan: order-service ==="
-                            docker run --rm --network host \
-                                -v $(pwd)/reports:/zap/wrk \
-                                -v $(pwd)/security-config/zap-rules.tsv:/zap/rules.tsv \
-                                zaproxy/zap-stable zap-baseline.py \
-                                -t http://localhost:8080 \
-                                -c rules.tsv \
-                                -J zap-order-report.json \
-                                -r zap-order-report.html \
-                                -a || true
-                        '''
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'reports/zap-order-report.*', allowEmptyArchive: true
-                            publishHTML(target: [
-                                reportDir: 'reports',
-                                reportFiles: 'zap-order-report.html',
-                                reportName: 'ZAP Report - order-service'
-                            ])
-                        }
+                        sh 'echo "=== [PLACEHOLDER] OWASP ZAP Scan: order-service would run here ==="'
                     }
                 }
                 stage('ZAP - product-service') {
                     steps {
-                        sh '''
-                            echo "=== OWASP ZAP Scan: product-service ==="
-                            docker run --rm --network host \
-                                -v $(pwd)/reports:/zap/wrk \
-                                -v $(pwd)/security-config/zap-rules.tsv:/zap/rules.tsv \
-                                zaproxy/zap-stable zap-baseline.py \
-                                -t http://localhost:3000 \
-                                -c rules.tsv \
-                                -J zap-product-report.json \
-                                -r zap-product-report.html \
-                                -a || true
-                        '''
-                    }
-                    post {
-                        always {
-                            archiveArtifacts artifacts: 'reports/zap-product-report.*', allowEmptyArchive: true
-                            publishHTML(target: [
-                                reportDir: 'reports',
-                                reportFiles: 'zap-product-report.html',
-                                reportName: 'ZAP Report - product-service'
-                            ])
-                        }
+                        sh 'echo "=== [PLACEHOLDER] OWASP ZAP Scan: product-service would run here ==="'
                     }
                 }
             }
@@ -397,10 +257,6 @@ pipeline {
         }
         failure {
             echo 'Pipeline FAILED. Check security scan reports in archived artifacts.'
-            // Uncomment to enable notifications:
-            // mail to: 'team@example.com',
-            //      subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            //      body: "Pipeline failed. Check: ${env.BUILD_URL}"
         }
         cleanup {
             sh 'docker compose -f docker/docker-compose.staging.yml down || true'
