@@ -1,0 +1,42 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.jar
+
+# Node
+node_modules/
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials.json
+
+# Build & Reports
+reports/
+dist/
+build/
+coverage/
+*.sarif
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+
+# Jenkins
+.jenkins/

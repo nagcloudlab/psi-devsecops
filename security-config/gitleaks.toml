@@ -1,0 +1,32 @@
+[extend]
+useDefault = true
+
+title = "Gitleaks Configuration"
+
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''(.*?)(jpg|gif|doc|pdf|bin|svg|socket|png)$''',
+    '''node_modules''',
+    '''package-lock\.json''',
+    '''\.gradle''',
+    '''target/''',
+]
+
+[[rules]]
+id = "custom-api-key"
+description = "Detected a possible API key"
+regex = '''(?i)(api[_-]?key|apikey)\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{20,})['"]?'''
+keywords = ["api_key", "apikey", "api-key"]
+
+[[rules]]
+id = "custom-jdbc-password"
+description = "Detected JDBC password in config"
+regex = '''(?i)(jdbc|datasource).*password\s*[:=]\s*['"]?(.{8,})['"]?'''
+keywords = ["jdbc", "datasource", "password"]
+
+[[rules]]
+id = "custom-spring-secret"
+description = "Detected Spring secret in properties"
+regex = '''(?i)(secret|token|password|credential)\s*[:=]\s*['"]?([a-zA-Z0-9_\-/.]{10,})['"]?'''
+keywords = ["secret", "token", "password", "credential"]

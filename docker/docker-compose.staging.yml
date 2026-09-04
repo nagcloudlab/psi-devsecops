@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  order-service:
+    image: ${DOCKER_REGISTRY:-local}/order-service:${IMAGE_TAG:-latest}
+    build:
+      context: ../order-service
+    container_name: order-service-staging
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=staging
+    depends_on:
+      - product-service
+
+  product-service:
+    image: ${DOCKER_REGISTRY:-local}/product-service:${IMAGE_TAG:-latest}
+    build:
+      context: ../product-service
+    container_name: product-service-staging
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=staging

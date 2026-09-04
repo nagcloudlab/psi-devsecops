@@ -1,0 +1,9 @@
+FROM node:latest
+RUN apt-get update
+RUN apt-get install -y curl wget vim netcat
+ADD . /app
+WORKDIR /app
+RUN npm install
+ENV API_KEY=sk_live_abc123def456
+EXPOSE 3000 22 8080
+CMD npm start

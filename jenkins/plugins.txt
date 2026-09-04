@@ -1,0 +1,37 @@
+# Required Jenkins Plugins for DevSecOps Pipeline
+# Install: jenkins-plugin-cli --plugin-file plugins.txt
+
+# Pipeline
+workflow-aggregator
+pipeline-stage-view
+pipeline-utility-steps
+
+# Git
+git
+github
+
+# Build Tools
+maven-plugin
+nodejs
+
+# Docker
+docker-workflow
+docker-plugin
+
+# Security Scan Reports
+dependency-check-jenkins-plugin
+warnings-ng
+htmlpublisher
+
+# Test & Coverage
+junit
+jacoco
+cobertura
+
+# Credentials
+credentials-binding
+credentials
+
+# Notifications
+email-ext
+slack

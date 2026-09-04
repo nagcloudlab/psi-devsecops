@@ -1,0 +1,29 @@
+{
+  "name": "product-service",
+  "version": "1.0.0",
+  "description": "Product microservice - Node.js Express",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest --coverage --forceExit",
+    "test:ci": "jest --ci --coverage --forceExit",
+    "lint": "eslint src/",
+    "audit:check": "npm audit --audit-level=high"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.3.1",
+    "express-validator": "^7.1.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-security": "^3.0.0",
+    "nodemon": "^3.1.0"
+  }
+}
