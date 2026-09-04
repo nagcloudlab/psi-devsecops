@@ -9,7 +9,6 @@ pipeline {
     environment {
         DOCKER_REGISTRY   = 'docker.io'
         IMAGE_TAG          = "${env.BUILD_NUMBER}-${env.GIT_COMMIT?.take(7) ?: 'latest'}"
-        SEMGREP_APP_TOKEN  = credentials('semgrep-app-token')
     }
 
     options {
