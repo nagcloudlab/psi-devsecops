@@ -49,6 +49,8 @@ pipeline {
                 stage('Build order-service') {
                     steps {
                         dir('order-service') {
+                            sh 'java --version'
+                            sh 'mvn --version'
                             sh 'mvn clean compile -B'
                         }
                     }
