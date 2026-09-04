@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven-3.9'
-        nodejs 'Node-20'
-    }
-
     environment {
         DOCKER_REGISTRY   = 'docker.io'
         IMAGE_TAG          = "${env.BUILD_NUMBER}-${env.GIT_COMMIT?.take(7) ?: 'latest'}"
