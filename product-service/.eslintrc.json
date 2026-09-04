@@ -15,6 +15,7 @@
     "security/detect-eval-with-expression": "error",
     "security/detect-no-csrf-before-method-override": "error",
     "no-eval": "error",
-    "no-implied-eval": "error"
+    "no-implied-eval": "error",
+    "no-unused-vars": ["error", { "args": "none" }]
   }
 }
