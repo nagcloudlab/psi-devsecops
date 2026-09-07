@@ -80,7 +80,7 @@ pipeline {
                     }
                     post {
                         always {
-                            junit 'order-service/target/surefire-reports/*.xml'
+                            junit allowEmptyResults: true, testResults: 'order-service/target/surefire-reports/*.xml'
                             jacoco(execPattern: 'order-service/target/jacoco.exec')
                         }
                     }
@@ -93,7 +93,7 @@ pipeline {
                     }
                     post {
                         always {
-                            junit 'product-service/coverage/junit.xml'
+                            junit allowEmptyResults: true, testResults: 'product-service/coverage/junit.xml'
                             publishHTML(target: [
                                 reportDir: 'product-service/coverage/lcov-report',
                                 reportFiles: 'index.html',
