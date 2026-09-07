@@ -81,7 +81,6 @@ pipeline {
                     post {
                         always {
                             junit allowEmptyResults: true, testResults: 'order-service/target/surefire-reports/*.xml'
-                            jacoco(execPattern: 'order-service/target/jacoco.exec')
                         }
                     }
                 }
