@@ -1,5 +1,5 @@
 # ─── Build Stage ───
-FROM maven:3.9-eclipse-temurin-17-alpine AS build
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
@@ -7,7 +7,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests -B
 
 # ─── Production Stage ───
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 RUN addgroup -g 1001 -S appgroup && \
     adduser -S appuser -u 1001 -G appgroup
 WORKDIR /app
